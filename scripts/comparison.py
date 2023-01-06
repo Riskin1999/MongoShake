@@ -95,8 +95,8 @@ def check(src, dst):
         #     log_info("EQUL => database [%s] stats equals" % db)
 
         # for collections in db
-        srcColls = srcDb.collection_names()
-        dstColls = dstDb.collection_names()
+        srcColls = srcDb.list_collection_names()
+        dstColls = dstDb.list_collection_names()
         srcColls = [coll for coll in srcColls if coll not in configure[EXCLUDE_COLLS] and srcColls.count(coll) > 0]
         dstColls = [coll for coll in dstColls if coll not in configure[EXCLUDE_COLLS] and dstColls.count(coll) > 0]
         if len(srcColls) != len(dstColls):
@@ -117,7 +117,7 @@ def check(src, dst):
             srcColl = srcDb[coll]
             dstColl = dstDb[coll]
             # comparison collection records number
-            if srcColl.count() != dstColl.count():
+            if srcColl.count_documents({}) != dstColl.count_documents({}):
                 log_error("DIFF => collection [%s] record count not equals" % (coll))
                 return False
             else:
@@ -149,10 +149,10 @@ def data_comparison(srcColl, dstColl, mode):
     if mode == "no":
         return True
     elif mode == "sample":
-        # srcColl.count() mus::t equals to dstColl.count()
-        count = configure[COMPARISION_COUNT] if configure[COMPARISION_COUNT] <= srcColl.count() else srcColl.count()
+        # srcColl.count_documents({}) mus::t equals to dstColl.count_documents({})
+        count = configure[COMPARISION_COUNT] if configure[COMPARISION_COUNT] <= srcColl.count_documents({}) else srcColl.count_documents({})
     else: # all
-        count = srcColl.count()
+        count = srcColl.count_documents({})
 
     if count == 0:
         return True
