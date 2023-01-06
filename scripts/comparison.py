@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # -*- coding:utf-8 -*-  
 
@@ -56,8 +56,8 @@ def check(src, dst):
     #
     # check metadata 
     #
-    srcDbNames = src.conn.database_names()
-    dstDbNames = dst.conn.database_names()
+    srcDbNames = src.conn.list_database_names()
+    dstDbNames = dst.conn.list_database_names()
     srcDbNames = [db for db in srcDbNames if db not in configure[EXCLUDE_DBS]]
     dstDbNames = [db for db in dstDbNames if db not in configure[EXCLUDE_DBS]]
     if len(srcDbNames) != len(dstDbNames):
